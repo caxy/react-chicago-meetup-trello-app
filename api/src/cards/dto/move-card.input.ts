@@ -5,4 +5,5 @@ export class MoveCardInput {
   id: string;
   laneId: string;
   newPosition: number;
+  oldLaneId?: string;
 }

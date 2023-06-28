@@ -19,12 +19,13 @@ export class CardsService {
     private readonly pubSub: RedisPubSub,
     @Inject(forwardRef(() => LanesService))
     private readonly lanesService: LanesService,
-  ) {
-  }
+  ) {}
 
   async create(createCardInput: CreateCardInput) {
-    const card = this.cardRepository.create(
-      { ...createCardInput, position: await this.getNextCardPosition(createCardInput.laneId) });
+    const card = this.cardRepository.create({
+      ...createCardInput,
+      position: await this.getNextCardPosition(createCardInput.laneId),
+    });
     await card.save();
     await this.publishCardEvent(AppEvents.CardAdded, card);
     await this.publishLaneUpdatedEvent(card.laneId);
@@ -32,7 +33,10 @@ export class CardsService {
   }
 
   async findAll(options?: FindManyOptions<Card>) {
-    return this.cardRepository.find(options);
+    return this.cardRepository.find({
+      ...options,
+      order: options?.order ?? { position: 'ASC' },
+    });
   }
 
   async findOne(id: string) {
@@ -48,12 +52,13 @@ export class CardsService {
 
   async remove(id: string) {
     const card = await this.findOne(id);
+    const cardData = { ...card };
     await card.remove();
 
     await this.publishCardEvent(AppEvents.CardDeleted, card);
     await this.publishLanesUpdatedEvent();
 
-    return card;
+    return cardData;
   }
 
   async moveCard(id: string, laneId: string, newPosition: number) {
@@ -107,18 +112,19 @@ export class CardsService {
   }
 
   private async getNextCardPosition(laneId: string) {
-    let result = await this.cardRepository.createQueryBuilder('card')
+    let result = await this.cardRepository
+      .createQueryBuilder('card')
       .select('MAX(card.position) AS maxPosition, COUNT(card.id) AS totalCards')
       .where('card.laneId = :laneId', { laneId })
       .groupBy('card.laneId')
-      .getRawOne<{ maxPosition?: number, totalCards: number }>();
+      .getRawOne<{ maxPosition?: number; totalCards: number }>();
 
     if (!result) {
       result = { maxPosition: undefined, totalCards: 0 };
     }
 
     let max = result.maxPosition ?? 0;
-    if (max < ((result.totalCards - 1) * CARD_POSITION_INCREMENT)) {
+    if (max < (result.totalCards - 1) * CARD_POSITION_INCREMENT) {
       max = (result.totalCards - 1) * CARD_POSITION_INCREMENT;
     }
 
@@ -126,7 +132,9 @@ export class CardsService {
   }
 
   private async publishLaneUpdatedEvent(laneId: string) {
-    await this.publishLanesUpdatedEvent([await this.lanesService.findOne(laneId)]);
+    await this.publishLanesUpdatedEvent([
+      await this.lanesService.findOne(laneId),
+    ]);
   }
 
   private async publishLanesUpdatedEvent(lanes?: Lane[]) {

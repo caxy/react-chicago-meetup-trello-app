@@ -48,9 +48,10 @@ export class LanesService {
 
   async remove(id: string) {
     const lane = await this.findOne(id);
+    const laneData = { ...lane };
     await lane.remove();
     await this.publishLaneEvent(AppEvents.LaneDeleted, lane);
-    return lane;
+    return laneData;
   }
 
   async moveLane(id: string, newPosition: number) {
