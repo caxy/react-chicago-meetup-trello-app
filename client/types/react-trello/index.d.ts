@@ -27,19 +27,19 @@ declare namespace ReactTrello {
     publish: (any) => void;
   }
 
-  export interface DraggableCard {
+  export interface DraggableCard<CardMetadata = unknown> {
     id?: string;
     title: string;
     description?: string;
     label?: string;
-    metadata?: any;
+    metadata?: CardMetadata;
   }
 
-  interface Lane {
+  interface Lane<CardMetadata = unknown> {
     id: string;
     title?: string;
     label?: string;
-    cards?: Array<DraggableCard>;
+    cards?: Array<DraggableCard<CardMetadata>>;
     disallowAddingCard?: boolean;
   }
 
@@ -110,6 +110,7 @@ declare namespace ReactTrello {
      * Called when a new card is added: onCardAdd(card, laneId)
      */
     onCardAdd?: (card: DraggableCard, laneId: string) => void;
+    onCardUpdate?: (laneId: string, card: DraggableCard<CardMetaData>) => void;
     /**
      * Pass custom element to replace the Add Card link at the end of the lane (when board is editable)
      */
@@ -145,7 +146,7 @@ declare namespace ReactTrello {
     /**
      * Used to specify the logic to sort cards on a lane: laneSortFunction(card1, card2)
      */
-    laneSortFunction?: (card1: Card, card2: Card) => void;
+    laneSortFunction?: (card1: Card, card2: Card) => number;
     /**
      * This is a special function that providers a publishHook to pass new events to the board. See details in Publish Events section
      */
@@ -196,19 +197,19 @@ declare module "react-trello" {
   export interface EventBus {
     publish: (any) => void;
   }
-  export interface DraggableCard {
+  export interface DraggableCard<CardMetadata = unknown> {
     id?: string;
     title: string;
     description?: string;
     label?: string;
-    metadata?: any;
+    metadata?: CardMetadata;
   }
 
-  export interface Lane {
+  export interface Lane<CardMetadata = unknown> {
     id: string;
     title?: string;
     label?: string;
-    cards?: Array<DraggableCard>;
+    cards?: Array<DraggableCard<CardMetadata>>;
     disallowAddingCard?: boolean;
   }
   export default ReactTrelloBoard;
