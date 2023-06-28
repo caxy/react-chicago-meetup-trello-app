@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Lane } from 'src/lanes/entities/lane.entity';
 
@@ -13,6 +13,9 @@ export class Card extends BaseEntity {
 
   @Column('varchar', { name: 'title', nullable: false, length: 255 })
   title: string;
+
+  @Column('int', { name: 'position', nullable: false, default: 0 })
+  position: number;
 
   @Column('varchar', { name: 'label', nullable: true, length: 100 })
   label?: string;

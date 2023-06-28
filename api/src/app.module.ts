@@ -11,6 +11,7 @@ import { LanesModule } from './lanes/lanes.module';
 import { CardsModule } from './cards/cards.module';
 import { Lane } from 'src/lanes/entities/lane.entity';
 import { Card } from 'src/cards/entities/card.entity';
+import { PubSubModule } from './pub-sub/pub-sub.module';
 
 @Module({
   imports: [
@@ -36,12 +37,19 @@ import { Card } from 'src/cards/entities/card.entity';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      subscriptions: {
+        'graphql-ws': true
+      },
     }),
+    PubSubModule,
     LanesModule,
     CardsModule,
+    PubSubModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {
 }

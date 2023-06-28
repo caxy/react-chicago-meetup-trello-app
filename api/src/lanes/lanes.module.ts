@@ -7,6 +7,7 @@ import { CardsModule } from '../cards/cards.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Lane]), CardsModule],
-  providers: [LanesResolver, LanesService]
+  providers: [LanesResolver, LanesService],
+  exports: [LanesService],
 })
 export class LanesModule {}

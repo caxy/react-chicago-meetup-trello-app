@@ -1,7 +1,7 @@
 import { CreateCardInput } from './create-card.input';
-import { InputType, PartialType } from '@nestjs/graphql';
+import { InputType, OmitType, PartialType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateCardInput extends PartialType(CreateCardInput) {
+export class UpdateCardInput extends PartialType(OmitType(CreateCardInput, ['laneId'])) {
   id: string;
 }

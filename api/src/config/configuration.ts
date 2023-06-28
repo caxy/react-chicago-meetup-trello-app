@@ -1,4 +1,5 @@
 export interface AppConfig {
+  port: number;
   database: {
     port: number;
     host: any;
@@ -6,7 +7,9 @@ export interface AppConfig {
     password?: string;
     databaseName: string;
   };
-  port: number;
+  redis: {
+    url: string;
+  };
 }
 
 export default (): AppConfig => ({
@@ -17,5 +20,8 @@ export default (): AppConfig => ({
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     databaseName: process.env.DATABASE_NAME,
+  },
+  redis: {
+    url: process.env.REDIS_URL || 'redis://localhost:6379',
   },
 });

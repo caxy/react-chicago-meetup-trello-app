@@ -8,6 +8,7 @@ type Card {
   label: String
   lane: Lane
   laneId: String!
+  position: Float!
   title: String!
 }
 
@@ -19,7 +20,6 @@ input CreateCardInput {
 }
 
 input CreateLaneInput {
-  position: Float!
   title: String!
 }
 
@@ -30,9 +30,22 @@ type Lane {
   title: String!
 }
 
+input MoveCardInput {
+  id: String!
+  laneId: String!
+  newPosition: Float!
+}
+
+input MoveLaneInput {
+  id: String!
+  newPosition: Float!
+}
+
 type Mutation {
   createCard(createCardInput: CreateCardInput!): Card!
   createLane(createLaneInput: CreateLaneInput!): Lane!
+  moveCard(moveCardInput: MoveCardInput!): [Card!]!
+  moveLane(moveLaneInput: MoveLaneInput!): [Lane!]!
   removeCard(id: String!): Card!
   removeLane(id: String!): Lane!
   updateCard(updateCardInput: UpdateCardInput!): Card!
@@ -46,16 +59,22 @@ type Query {
   lanes: [Lane!]!
 }
 
+type Subscription {
+  cardAdded: Card!
+  cardDeleted: Card!
+  cardUpdated: Card!
+  laneDeleted: Lane!
+  lanesUpdated: [Lane!]!
+}
+
 input UpdateCardInput {
   description: String
   id: String!
   label: String
-  laneId: String
   title: String
 }
 
 input UpdateLaneInput {
   id: String!
-  position: Float
   title: String
 }
