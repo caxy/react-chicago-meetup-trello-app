@@ -1,0 +1,61 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Card {
+  description: String
+  id: String!
+  label: String
+  lane: Lane
+  laneId: String!
+  title: String!
+}
+
+input CreateCardInput {
+  description: String
+  label: String
+  laneId: String!
+  title: String!
+}
+
+input CreateLaneInput {
+  position: Float!
+  title: String!
+}
+
+type Lane {
+  cards: [Card!]
+  id: String!
+  position: Float!
+  title: String!
+}
+
+type Mutation {
+  createCard(createCardInput: CreateCardInput!): Card!
+  createLane(createLaneInput: CreateLaneInput!): Lane!
+  removeCard(id: String!): Card!
+  removeLane(id: String!): Lane!
+  updateCard(updateCardInput: UpdateCardInput!): Card!
+  updateLane(updateLaneInput: UpdateLaneInput!): Lane!
+}
+
+type Query {
+  card(id: String!): Card!
+  cards: [Card!]!
+  lane(id: String!): Lane!
+  lanes: [Lane!]!
+}
+
+input UpdateCardInput {
+  description: String
+  id: String!
+  label: String
+  laneId: String
+  title: String
+}
+
+input UpdateLaneInput {
+  id: String!
+  position: Float
+  title: String
+}
